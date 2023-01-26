@@ -4,9 +4,7 @@ from view.design.DesignMainWindow import DesignMainWindow
 from view.graph.DbWindow import DbWindow
 from view.graph.GraphWindow import GraphWindow
 from view.graph.TimeRenameWindow import TimeRenameWindow
-dbPath = "C:/Users/ym199/OneDrive/デスクトップ/画像/Inspection/DB/"
-dbFilename = "design"
-cameratblName = "camera"
+from view.SettingWindow import SettingWindow
 
 class MainWindow(QWidget):
 
@@ -16,7 +14,7 @@ class MainWindow(QWidget):
         self.setWindowTitle('画像担当便利ツール')
 
         designGroup = self.getDesignGroup()
-
+        settingGroup = self.getSettingGroup()
         layout = QGridLayout()
         layout.addWidget(designGroup)
         self.setLayout(layout)
@@ -25,21 +23,25 @@ class MainWindow(QWidget):
         groupbox = QGroupBox("設計")
         vbox = QVBoxLayout()
         groupbox.setLayout(vbox)
-
-        DesignBtn1 = QPushButton("理論設計")
-        DesignBtn2 = QPushButton("ポンチ絵設計")
-        DesignBtn3 = QPushButton("見積依頼")
-
-        DesignBtn1.clicked.connect(self.makeDesignWindow)
-        DesignBtn2.clicked.connect(self.makeTimeWindow)
-        DesignBtn3.clicked.connect(self.makeDbWindow)
-
-        vbox.addWidget(DesignBtn1)
-        vbox.addWidget(DesignBtn2)
-        vbox.addWidget(DesignBtn3)
-        
+        designBtn1 = QPushButton("理論設計")
+        designBtn2 = QPushButton("ポンチ絵設計")
+        designBtn3 = QPushButton("見積依頼")
+        designBtn1.clicked.connect(self.makeDesignWindow)
+        designBtn2.clicked.connect(self.makeTimeWindow)
+        designBtn3.clicked.connect(self.makeDbWindow)
+        vbox.addWidget(designBtn1)
+        vbox.addWidget(designBtn2)
+        vbox.addWidget(designBtn3)        
         return groupbox
 
+    def getSettingGroup(self):
+        groupbox = QGroupBox("設定")
+        vbox = QVBoxLayout()
+        groupbox.setLayout(vbox)
+        designBtn1 = QPushButton("設定")
+        designBtn1.clicked.connect(self.makeSettingWindow)
+        vbox.addWidget(designBtn1)
+        return groupbox
 
     def makeDesignWindow(self):
         w = DesignMainWindow()
@@ -56,3 +58,7 @@ class MainWindow(QWidget):
     def makeTimeWindow(self):
         w = TimeRenameWindow()
         w.show() 
+
+    def makeSettingWindow(self):
+        w = SettingWindow()
+        w.show()

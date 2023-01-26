@@ -1,41 +1,18 @@
-import sys
-import os
-import pathlib
-
-from pyexpat import model
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 from model import general
 from model import qtFun
 from model import db
-
-DESIGN_DB_NAME = "design"
-LENS_TABLE_NAME = "lens"
-CAMERA_TYPE = ["","1/2","1/1.8","2/3","1","1.1"]
-SPEC = "SPECIFICATION"
-MAGNIFICATION = "MAGNIFICATION"
-DEPTH ="DEPTH"
-IMG_SIZE = "IMAGE_SIZE"
-SUMMARY = "SUMMARY"
-MAKER = "MAKER"
-URL = "URL"
-
-FOCAL_DISTANCE = "FOCAL_DISTANCE"
-OI_DISTANNCE ="OI_DISTANNCE"
-WD ="WD"
-FOV_X = "FOV_X"
-FOV_Y = "FOV_Y"
+from model import const
+from model.path import Path
 
 class ResistLensWindow(QWidget):
     def __init__(self, parent=None):
         super(ResistLensWindow, self).__init__(parent)
+        self.curPath = Path()
         self.w = QDialog(parent)
         self.w.setWindowTitle('レンズ登録画面') 
-        self.projectPath = pathlib.Path(sys.argv[0]).parents[1]
-        self.dbPath = os.path.join(self.projectPath,"db\\")
-        self.inputPath = os.path.join(self.projectPath,"input\\")
-        self.settingPath = os.path.join(self.projectPath,"setting\\")
         layout = QVBoxLayout()
         layout.addWidget(self.getRegistrationLensGroup())
         layout.addLayout(self.resistBtnLayout())
@@ -84,7 +61,7 @@ class ResistLensWindow(QWidget):
     def getImgSizeLayout(self):    
         layout = QHBoxLayout()
         layout1,self.imgSizeList = qtFun.getLabelAndListLayout(self,"イメージサイズ",1)
-        self.imgSizeList.addItems(CAMERA_TYPE)
+        self.imgSizeList.addItems(const.CAMERA_TYPE)
         layout.addLayout(layout1)
         layout.addLayout(qtFun.getLabelLayout(self,"型"))
         return layout
@@ -153,7 +130,7 @@ class ResistLensWindow(QWidget):
             errMsg.append("型式が入力されていません。")
         if not errMsg:
             dic,colDic = self.setLensDict()
-            isErr = db.makeDbFile2(self.dbPath,DESIGN_DB_NAME,LENS_TABLE_NAME,dic,colDic)
+            isErr = db.makeDbFile2(self.curPath.dbPath,const.DESIGN_DB_NAME,const.DESIGN_DB_NAME,dic,colDic)
             if isErr:
                 QMessageBox.critical(None, "入力エラー", "型式名が既に登録済です。型式名を変更してください。", QMessageBox.Ok)
             else:
@@ -165,30 +142,30 @@ class ResistLensWindow(QWidget):
     def setLensDict(self):
         dic ={}
         colDic = {}
-        dic[SPEC] = [self.specIbox.text()]
-        dic[MAGNIFICATION] = [self.magnIbox.text()]
-        dic[DEPTH] = [self.depthIbox.text()]
-        dic[IMG_SIZE] = [self.imgSizeList.currentText()]
-        dic[SUMMARY] = [self.summaryIbox.text()]
-        dic[MAKER] = [self.makerIbox.text()]
-        dic[URL] = [self.urlIbox.text()]
-        dic[FOCAL_DISTANCE] = [self.focalDistanceIbox.text()]
-        dic[OI_DISTANNCE] = [self.uiDistanceIbox.text()]
-        dic[WD] = [self.wdIbox.text()]
-        dic[FOV_X] = [self.fovXIbox.text()]
-        dic[FOV_Y] = [self.fovYIbox.text()]
-        colDic[SPEC] = "TEXT PRIMARY KEY"
-        colDic[MAGNIFICATION] = "INT"
-        colDic[DEPTH] = "INT"
-        colDic[IMG_SIZE] = "TEXT"
-        colDic[SUMMARY] = "TEXT"
-        colDic[MAKER] = "TEXT"
-        colDic[URL] = "TEXT"
-        colDic[FOCAL_DISTANCE] = "INT"
-        colDic[OI_DISTANNCE] = "INT"
-        colDic[WD] = "INT"
-        colDic[FOV_X] = "INT"
-        colDic[FOV_Y] = "INT"
+        dic[const.SPEC] = [self.specIbox.text()]
+        dic[const.MAGNIFICATION] = [self.magnIbox.text()]
+        dic[const.DEPTH] = [self.depthIbox.text()]
+        dic[const.IMG_SIZE] = [self.imgSizeList.currentText()]
+        dic[const.SUMMARY] = [self.summaryIbox.text()]
+        dic[const.MAKER] = [self.makerIbox.text()]
+        dic[const.URL] = [self.urlIbox.text()]
+        dic[const.FOCAL_DISTANCE] = [self.focalDistanceIbox.text()]
+        dic[const.OI_DISTANNCE] = [self.uiDistanceIbox.text()]
+        dic[const.WD] = [self.wdIbox.text()]
+        dic[const.FOV_X] = [self.fovXIbox.text()]
+        dic[const.FOV_Y] = [self.fovYIbox.text()]
+        colDic[const.SPEC] = "TEXT PRIMARY KEY"
+        colDic[const.MAGNIFICATION] = "INT"
+        colDic[const.DEPTH] = "INT"
+        colDic[const.IMG_SIZE] = "TEXT"
+        colDic[const.SUMMARY] = "TEXT"
+        colDic[const.MAKER] = "TEXT"
+        colDic[const.URL] = "TEXT"
+        colDic[const.FOCAL_DISTANCE] = "INT"
+        colDic[const.OI_DISTANNCE] = "INT"
+        colDic[const.WD] = "INT"
+        colDic[const.FOV_X] = "INT"
+        colDic[const.FOV_Y] = "INT"
         return dic,colDic
 
     def show(self):

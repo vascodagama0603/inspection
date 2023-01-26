@@ -1,6 +1,7 @@
 import configparser
 import numpy as np
-
+import pathlib
+import sys
 Y_AXIS_NUMBER = 5
 
 def isint(s):  # 整数値を表しているかどうかを判定
@@ -156,3 +157,4 @@ def getSensorSize(v1,v2):
 def getFocalDistance(sensorSize,fov,wd):
     v = wd / (1 + (fov / sensorSize))
     return v
+
